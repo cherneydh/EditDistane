@@ -72,54 +72,69 @@ def edit_distance(word1, word2):
 	print("The optimal alignment is: \n")
 	print(word1)
 
-	word = 0
-	x = 0
-	y = 0
+	printed = []
+	word = len2 - 1
+	x = len2
+	y = len1
 	position = graph[x][y]
-	while x != len2 and y != len1:
-		if x <= len2-1:
-			right = graph[x+1][y]
+	while x != 0 or y != 0:
+		if x >= 1:
+			left = graph[x-1][y]
 		else:
-			right = 1000
-		if y <= len1-1:
-			bottom = graph[x][y+1]
+			left = 1000
+		if y >= 1:
+			top = graph[x][y-1]
 		else:
-			bottom = 1000
-		if x <= len2-1 and y <= len1-1:
-			diag = graph[x+1][y+1]
+			top = 1000
+		if x >= 1 and y >= 1:
+			diag = graph[x-1][y-1]
 		else:
 			diag = 1000
 	
-		if diag < bottom and diag < right:
-			print(word2[word], end='')
-			word = word + 1
-			position = graph[x+1][y+1]
-			x = x + 1
-			y = y + 1
-		if bottom < diag and bottom < right and right == 1000:
-			print(word2[word], end='')
-			word = word + 1
-			position = graph[x][y+1]
-			y = y + 1
-		if bottom < diag and bottom < right:
-			print("_", end='')
-			position = graph[x][y+1]
-			y = y + 1
-		if right < diag and right < bottom and bottom == 1000:
-			print(word2[word], end='')
-			word = word + 1
-			position = graph[x+1][y]
-			x = x + 1
-		if right < diag and right < bottom:
-			print("_", end='')		
-			position = graph[x][y+1]
-			y = y + 1
-		if right == diag == bottom:
-			print(word2[word], end='')
-			word = word + 1
-			position = graph[x+1][y+1]
-			y = y + 1
-			x = x + 1
-
+		if diag < top and diag < left:
+			printed.insert(0, word2[word])
+			word = word - 1
+			position = graph[x-1][y-1]
+			x = x - 1
+			y = y - 1
+		if left == 1000:
+			printed.insert(0, "_")
+			word = word - 1
+			position = graph[x][y-1]
+			y = y - 1
+		if top < diag and top < left:
+			printed.insert(0, "_")
+			position = graph[x][y-1]
+			y = y - 1
+		if top == 1000:
+			printed.insert(0, "_")
+			word = word - 1
+			position = graph[x-1][y]
+			x = x - 1
+		if left < diag and left < top:
+			printed.insert(0, "_")
+			position = graph[x-1][y]
+			x = x - 1
+		if diag == left <= top:
+			printed.insert(0, word2[word])
+			word = word - 1
+			position = graph[x-1][y-1]
+			y = y - 1
+			x = x - 1
+		if diag == top <= left:
+			printed.insert(0, word2[word])
+			word = word - 1
+			position = graph[x-1][y-1]
+			y = y - 1
+			x = x - 1
+		if left == diag == top:
+			printed.insert(0, word2[word])
+			word = word - 1
+			position = graph[x-1][y-1]
+			y = y - 1
+			x = x - 1
+		
+	for i in range(0, len(printed)):
+		print(printed[i], end='')
 	print("\n")
 edit_distance(word1,word2)
